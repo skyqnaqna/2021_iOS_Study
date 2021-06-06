@@ -82,7 +82,7 @@ func crashAndBurn() -> Never {
   fatalError("Something wrong")
 }
 
-//crashAndBurn()
+crashAndBurn()
 
 func someFunc(isAllIsWell: Bool) {
   guard isAllIsWell else {
@@ -93,7 +93,7 @@ func someFunc(isAllIsWell: Bool) {
 }
 
 someFunc(isAllIsWell: true)
-//someFunc(isAllIsWell: false)
+someFunc(isAllIsWell: false)
 
 // 반환 값 무시 함수
 func say(_ str: String) -> String {
@@ -111,7 +111,7 @@ discardSay("Hi") // 경고 ㄴㄴ
 
 // 옵셔널
 var optStr: String? = nil
-//var str: String = nil // error
+var str: String = nil // error
 
 // switch를 통한 옵셔널 값 확인
 func checkOptionalValue(value optionalValue: Any?) {
@@ -146,10 +146,26 @@ for number in numbers {
  Zero
  */
 
+// 옵셔널 바인딩
+var myName: String? = "subin"
 
+if let name = myName {
+  print(name)
+} else {
+  print("name == nil")
+} // subin
 
+var myAge: Int? = 99
 
+if let name = myName, let age = myAge {
+  print("My name is \(name). I'm \(age) years old")
+} // My name is subin. I'm 99 years old
 
+// 암시적 추출 옵셔널
+let lang: String? = "Python"
+let py: String = lang! // 강제 추출
+print(py) // Python
 
-
-
+let lang2: String! = "Swift"
+let swift: String = lang2 // 강제 추출 필요X
+print(swift) // Swfit

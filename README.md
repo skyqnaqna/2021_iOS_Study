@@ -6,6 +6,7 @@
 - [21.06.03](https://github.com/skyqnaqna/2021_iOS_Study/blob/main/Swift/1week/0603.swift)
 - [21.06.04](https://github.com/skyqnaqna/2021_iOS_Study/blob/main/Swift/1week/0604.swift)
 - [21.06.05](https://github.com/skyqnaqna/2021_iOS_Study/blob/main/Swift/1week/0605.swift)
+- [21.06.06](https://github.com/skyqnaqna/2021_iOS_Study/blob/main/Swift/1week/0606.swift)
 
 ### **2주차**
 ### **3주차**

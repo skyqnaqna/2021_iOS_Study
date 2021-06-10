@@ -157,27 +157,43 @@ print(upperName) // MAC
 name = "windows"
 print(name) //windows
 
+// 타입 프로퍼티
+class Account2 {
+  static let dollarRate: Double = 1000.0
 
+  var credit = 0
 
+  var dollarValue: Double {
+    get {
+      return Double(credit) / Self.dollarRate // Self.dollarRate = Account2.dollarRate
+    }
 
+    set {
+      credit = Int(newValue * Account2.dollarRate)
+    }
+  }
+}
 
+// 키 경로
+class Person {
+  var name: String
 
+  init(name: String) {
+    self.name = name
+  }
+}
 
+struct Stuff {
+  var name: String
+  var owner: Person
+}
 
+let keyPath = \Stuff.owner
+let nameKeyPath = keyPath.appending(path: \.name)
 
+let min = Person(name: "min")
+let macBook = Stuff(name: "MacBook Air", owner: min)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+print(macBook[keyPath: keyPath]) // swiftTest.Person
+print(macBook[keyPath: nameKeyPath]) // min
 

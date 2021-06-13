@@ -8,7 +8,8 @@
 ||[21.06.03](https://github.com/skyqnaqna/2021_iOS_Study/blob/main/Swift/1week/0603.swift)|[21.06.10](https://github.com/skyqnaqna/2021_iOS_Study/blob/main/Swift/2week/0610.swift)|
 ||[21.06.04](https://github.com/skyqnaqna/2021_iOS_Study/blob/main/Swift/1week/0604.swift)|[21.06.11 (1)](https://github.com/skyqnaqna/2021_iOS_Study/blob/main/Swift/2week/0611-1.swift)|
 ||[21.06.05](https://github.com/skyqnaqna/2021_iOS_Study/blob/main/Swift/1week/0605.swift)|[21.06.11 (2)](https://github.com/skyqnaqna/2021_iOS_Study/blob/main/Swift/2week/0611-2.swift)|
-||[21.06.06](https://github.com/skyqnaqna/2021_iOS_Study/blob/main/Swift/1week/0606.swift)|
+||[21.06.06](https://github.com/skyqnaqna/2021_iOS_Study/blob/main/Swift/1week/0606.swift)|[21.06.12](https://github.com/skyqnaqna/2021_iOS_Study/blob/main/Swift/2week/0612.swift)|
+|||
 
 
 ## **iOS**

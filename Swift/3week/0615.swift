@@ -1,110 +1,140 @@
 /*
- 스마게 연구원 탈출
+ 3주차
  21.06.15
- https://github.com/skyqnaqna/algorithm_study
+ https://github.com/skyqnaqna/2021_iOS_Study
  */
 
-#include <iostream>
-#include <cstdio>
-#include <algorithm>
-#include <queue>
-#include <vector>
-#include <string>
-#include <cmath>
-#include <set>
-#include <stack>
-
-#define INF 1e9
-#define endl "\n"
-
-typedef long long ll;
-typedef double dd;
-typedef std::pair<int, int> pii;
-typedef std::pair<ll, ll> pll;
-
-using namespace std;
-
-int n, m;
-vector <vector <int> > graph (102, vector<int>(102, 0));
-int dx[4] = {0, 1, 0, -1};
-int dy[4] = {-1, 0, 1, 0};
-
-vector <pii> researcher; // 연구원 위치
-
-int bfs ()
-{
-
-    int breakCount = 0;
-
-    bool visited[2][102][102] = { false };
-
-    queue <tuple<int, int, int, int> > q; // row, col, breakCount, researcher
-
-    q.push({researcher[0].first, researcher[0].second, 0, 0});
-    visited[0][researcher[0].first][researcher[0].second] = true;
-
-    q.push({researcher[1].first, researcher[1].second, 0, 1});
-    visited[1][researcher[1].first][researcher[1].second] = true;
-
-    while (!q.empty())
-    {
-        int nowRow, nowCol, nowCost, person;
-        tie(nowRow, nowCol, nowCost, person) = q.front();
-        q.pop();
-
-        if (nowRow < 1 || nowCol < 1 || nowRow > n || nowCol > m)
-        {
-            breakCount += nowCost;
-            continue;
-        } // 연구소 탈출
-
-        for (int i = 0; i < 4; ++i)
-        {
-            int row = nowRow + dy[i];
-            int col = nowCol + dx[i];
-
-            if (row < 0 || col < 0 || row > n + 1 || col > m + 1 || graph[row][col] == -1 || visited[person][row][col]) { continue; }
-            else if (graph[row][col] == 0)
-            {
-                q.push({row, col, nowCost, person});
-                visited[person][row][col] = true;
-            }
-            else if (graph[row][col] == 1)
-            {
-                q.push({row, col, nowCost + 1, person});
-                visited[person][row][col] = true;
-                graph[row][col] = 0;
-
-                printf("break: (%d, %d), cost: %d\n", row, col, nowCost + 1);
-            }
-        }
-    }
-
-    return breakCount;
+//===서브스크립트 구현===//
+struct Student {
+  var name: String
+  var number: Int
 }
 
+class School {
+  var number: Int = 0
+  var students: [Student] = [Student]()
 
-int main()
-{
-    scanf("%d %d", &n, &m);
+  func addStudent(name: String) {
+    let student = Student(name: name, number: self.number)
+    self.students.append(student)
+    self.number += 1
+  }
 
-    for (int i = 1; i <= n; ++i)
-    {
-        char str[101]; scanf("%s", str);
+  func addStudents(names: String...) {
+    for name in names {
+      self.addStudent(name: name)
+    }
+  }
 
-        for (int j = 1; j <= m; ++j)
-        {
-            if (str[j-1] == '#') { graph[i][j] = -1; }
-            else if (str[j-1] == '@') { graph[i][j] = 1; }
-            else if (str[j-1] == 'R')
-            {
-                researcher.push_back({i, j});
-            }
-        }
+  subscript(index: Int) -> Student? {
+    if index < self.number {
+      return self.students[index]
+    }
+    return nil
+  }
+}
+
+let highSchool = School()
+highSchool.addStudents(names: "Mi", "Su", "Ho")
+
+let aStudent: Student? = highSchool[1]
+print("\(aStudent?.number) \(aStudent?.name)") // Optional(1) Optional("Su")
+
+
+//===복수 서브스크립트===//
+class School2 {
+  var number: Int = 0
+  var students: [Student] = [Student]()
+
+  func addStudent(name: String) {
+    let student = Student(name: name, number: self.number)
+    self.students.append(student)
+    self.number += 1
+  }
+
+  func addStudents(names: String...) {
+    for name in names {
+      self.addStudent(name: name)
+    }
+  }
+
+  subscript(index: Int) -> Student? {
+    get {
+      if index < self.number {
+        return self.students[index]
+      }
+      return nil
     }
 
-    int result = bfs();
-    printf("%d\n", result);
+    set {
+      guard var newStudnet: Student = newValue else {
+        return
+      }
 
-    return 0;
+      var number = index
+
+      if index > self.number {
+        number = self.number
+        self.number += 1
+      }
+
+      newStudnet.number = number
+      self.students[number] = newStudnet
+    }
+  }
+
+  subscript(name: String) -> Int? {
+    get {
+      return self.students.filter{ $0.name == name }.first?.number
+    }
+
+    set {
+      guard var number: Int = newValue else {
+        return
+      }
+
+      if number > self.number {
+        number = self.number
+        self.number += 1
+      }
+
+      let newStudent: Student = Student(name: name, number: number)
+      self.students[number] = newStudent
+    }
+  }
+
+  subscript(name: String, number: Int) -> Student? {
+    return self.students.filter{ $0.name == name && $0.number == number }.first
+  }
 }
+
+let middleSchool: School2 = School2()
+middleSchool.addStudents(names: "Pio", "Mark", "Gon", "Li")
+
+let bStudent: Student? = middleSchool[1]
+print("\(bStudent?.number) \(bStudent?.name)") // Optional(1) Optional("Mark")
+
+print(middleSchool["Pio"], middleSchool["Jin"]) // Optional(0) nil
+
+middleSchool[0] = Student(name: "Bob", number: 0)
+middleSchool["Ken"] = 1
+
+print(middleSchool["Juho"]) // nil
+print(middleSchool["Ken"]) // Optional(1)
+print(middleSchool["Gon", 2]) // Optional(swiftTest.Student(name: "Gon", number: 2))
+print(middleSchool["Hee", 3]) // nil
+
+
+//===타입 서브스크립트===//
+enum School3: Int {
+  case elementary = 1, middle, high, university
+
+  static subscript(level: Int) -> School3? {
+    return Self(rawValue: level)
+    //= return School3(rawValue: level)
+  }
+}
+
+let schooool: School3? = School3[2]
+print(schooool) // Optional(swiftTest.School3.middle)
+

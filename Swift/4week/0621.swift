@@ -1,6 +1,6 @@
 /*
  4주차
- 21.06.21
+ 21.06.21 ~ 22
  https://github.com/skyqnaqna/2021_iOS_Study
  */
 
@@ -233,20 +233,243 @@ class Student4: Person4 {
 }
 
 
+//===클래스 이니셜라이저의 재정의===//
+class Person5 {
+  var name: String
+  var age: Int
+
+  init(name: String, age: Int) {
+    self.name = name
+    self.age = age
+  }
+
+  convenience init(name: String) {
+    self.init(name: name, age: 0)
+  }
+}
+
+class Student5: Person5 {
+  var major: String
+
+  override init(name: String, age: Int) {
+    self.major = "Swfit"
+    super.init(name: name, age: age)
+  }
+
+  convenience init(name: String) {
+    self.init(name: name, age: 7)
+  }
+}
 
 
+//===실패 가능한 이니셜라이저의 재정의===//
+class Person6 {
+  var name: String
+  var age: Int
+
+  init() {
+    self.name = "Unkown"
+    self.age = 0
+  }
+
+  init?(name: String, age: Int) {
+    if name.isEmpty {
+      return nil
+    }
+    self.name = name
+    self.age = age
+  }
+
+  init?(age: Int) {
+    if age < 0 {
+      return nil
+    }
+    self.name = "Unknown"
+    self.age = age
+  }
+}
+
+class Student6: Person6 {
+  var major: String
+
+  override init?(name: String, age: Int) {
+    self.major = "Swift"
+    super.init(name: name, age: age)
+  }
+
+  override init(age: Int) {
+    self.major = "Swift"
+    super.init()
+  }
+}
 
 
+//===편의 이니셜라이저 자동 상속===//
+class Person7 {
+  var name: String
+
+  init(name: String) {
+    self.name = name
+  }
+
+  convenience init() {
+    self.init(name: "Unknown")
+  }
+}
+
+class Student7: Person7 {
+  var major: String
+
+  convenience init(major: String) {
+    self.init()
+    self.major = major
+  }
+
+  override convenience init(name: String) {
+    self.init(name: name, major: "Unknown")
+  }
+
+  init(name: String, major: String) {
+    self.major = major
+    super.init(name: name)
+  }
+}
+
+class UniversityStudent7: Student7 {
+  var grade: String = "F"
+  var description: String {
+    return "\(self.name) \(self.major) \(self.grade)"
+  }
+
+  convenience init(name: String, major: String, grade: String) {
+    self.init(name: name, major: major)
+    self.grade = grade
+  }
+}
+
+let aaa = Person7()
+let bbb = Student7(major: "Swift")
+print(aaa.name, bbb.name, bbb.major) // Unknown Unknown Swift
+
+let ccc = UniversityStudent7()
+let ddd = UniversityStudent7(name: "yon")
+let eee = UniversityStudent7(name: "ker", major: "Python")
+let fff = UniversityStudent7(name: "tim", major: "C++", grade: "A+")
+
+print(ccc.description) // Unknown Unknown F
+print(ddd.description) // yon Unknown F
+print(eee.description) // ker Python F
+print(fff.description) // tim C++ A+
 
 
+//===요구 이니셜라이저 정의===//
+class Person8 {
+  var name: String
+
+  required init() {
+    self.name = "Unknown"
+  }
+}
+
+class Student8: Person8 {
+  var major: String = "Unknown"
+}
 
 
+//===요구 이니셜라이저 재구현===//
+class Student9: Person8 {
+  var major: String = "Unknown"
+
+  // 자신의 지정 이니셜라이저 구현
+  init(major: String) {
+    self.major = major
+    super.init()
+  }
+
+  required init() {
+    self.major = "Unknown"
+    super.init()
+  }
+}
+
+class UniversityStudent9: Student9 {
+  var grade: String
+
+  // 자신의 지정 이니셜라이저 구현
+  init(grade: String) {
+    self.grade = grade
+    super.init()
+  }
+
+  required init() {
+    self.grade = "F"
+    super.init()
+  }
+}
+
+let jisu = Student9()
+let aman = Student9(major: "Swift")
+let ran = UniversityStudent9(grade: "A")
+
+print(jisu.major) // Unknown
+print(aman.major) // Swift
+print(ran.grade) // A
 
 
+//===일반 이니셜라이저의 요구 이니셜라이저 변경===//
+class Person10 {
+  var name: String
 
+  init() {
+    self.name = "Unknown"
+  }
+}
 
+class Student10: Person10 {
+  var major: String = "Unknown"
 
+  init(major: String) {
+    self.major = major
+    super.init()
+  }
 
+  // 부모클래스의 이니셜라이저를 재정의함과 동시에 요구 이니셜라이저로 변경
+  required override init() {
+    self.major = "Unknown"
+    super.init()
+  }
 
+  // 이 요구 이니셜라이저는 앞으로 계속 요구함
+  required convenience init(name: String) {
+    self.init()
+    self.name = name
+  }
+}
 
+class UniversityStudent10: Student10 {
+  var grade: String
+
+  init(grade: String) {
+    self.grade = grade
+    super.init()
+  }
+
+  // Student 클래스에서 요구한 것 구현
+  required init() {
+    self.grade = "F"
+    super.init()
+  }
+
+  // Student 클래스에서 요구한 것 구현
+  required convenience init(name: String) {
+    self.init()
+    self.name = name
+  }
+}
+
+let gugu = UniversityStudent10()
+let dal = UniversityStudent10(name: "dal")
+
+print(gugu.grade) // F
+print(dal.name) // dal
 

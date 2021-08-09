@@ -17,24 +17,29 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view opaque="NO" contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="QJ0-Qz-uCC" customClass="PlayingCardView" customModule="PlayingCard" customModuleProvider="target">
-                                <rect key="frame" x="20" y="44" width="388" height="848"/>
+                                <rect key="frame" x="20" y="157.66666666666669" width="388" height="620.66666666666652"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" priority="750" constant="800" id="Ire-Pb-ywf"/>
+                                    <constraint firstAttribute="width" secondItem="QJ0-Qz-uCC" secondAttribute="height" multiplier="5:8" id="Vwu-JM-kjz"/>
+                                </constraints>
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemIndigoColor"/>
                         <constraints>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="QJ0-Qz-uCC" secondAttribute="bottom" id="JRC-pn-LoF"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="QJ0-Qz-uCC" secondAttribute="trailing" constant="20" id="WcP-0k-FoD"/>
-                            <constraint firstItem="QJ0-Qz-uCC" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="nwe-hP-i7D"/>
-                            <constraint firstItem="QJ0-Qz-uCC" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="wXD-mV-EAo"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="QJ0-Qz-uCC" secondAttribute="trailing" constant="20" id="ye6-MN-kwX"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="QJ0-Qz-uCC" secondAttribute="bottom" constant="20" id="JRC-pn-LoF"/>
+                            <constraint firstItem="QJ0-Qz-uCC" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="aJo-r1-heX"/>
+                            <constraint firstItem="QJ0-Qz-uCC" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="exu-XQ-4Sa"/>
+                            <constraint firstItem="QJ0-Qz-uCC" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="nwe-hP-i7D"/>
+                            <constraint firstItem="QJ0-Qz-uCC" firstAttribute="top" relation="greaterThanOrEqual" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="20" id="wXD-mV-EAo"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="QJ0-Qz-uCC" secondAttribute="trailing" constant="20" id="ye6-MN-kwX"/>
                         </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="44.927536231884062" y="79.6875"/>
+            <point key="canvasLocation" x="44.859813084112147" y="79.049676025917933"/>
         </scene>
     </scenes>
     <resources>

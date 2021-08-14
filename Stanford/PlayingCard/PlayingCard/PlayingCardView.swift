@@ -7,16 +7,33 @@
 
 import UIKit
 
+@IBDesignable
 class PlayingCardView: UIView {
-  
-  var rank: Int = 11 {
+  @IBInspectable
+  var rank: Int = 6 {
     didSet { // rank가 바뀌면 드로잉을 다시 함
       setNeedsDisplay() // drawRect를 직접 부를 수 없으므로 시스템에게 말해준다
       setNeedsLayout() // 오토레이아웃을 안쓴 서브뷰들을 재배치
     }
   }
+  
+  @IBInspectable
   var suit: String = "❤️" { didSet { setNeedsDisplay(); setNeedsLayout() }}
+  
+  @IBInspectable
   var isFaceUp: Bool = true { didSet { setNeedsDisplay(); setNeedsLayout() }}
+  
+  var faceCardScale: CGFloat = SizeRatio.faceCardImageSizeToBoundsSize { didSet { setNeedsDisplay() }}
+  
+  // 카드 축소/확대에 대한 제스쳐 핸들러 (핸들러니까 @objc ?)
+  @objc func adjustFaceCardScale(byHandlingGestureRecognizedBy recognizer: UIPinchGestureRecognizer) {
+    switch recognizer.state {
+    case .changed, .ended:
+      faceCardScale *= recognizer.scale
+      recognizer.scale = 1.0
+    default: break
+    }
+  }
   
   private func centeredAttributedString(_ string: String, fontSize: CGFloat) -> NSAttributedString {
     var font = UIFont.preferredFont(forTextStyle: .body).withSize(fontSize)
@@ -72,6 +89,46 @@ class PlayingCardView: UIView {
     lowerRightCornerLabel.frame.origin = CGPoint(x: bounds.maxX, y: bounds.maxY).offsetBy(dx: -cornerOffset, dy: -cornerOffset).offsetBy(dx: -lowerRightCornerLabel.frame.size.width, dy: -lowerRightCornerLabel.frame.size.height)
     
   }
+  
+  private func drawPips()
+  {
+      let pipsPerRowForRank = [[0],[1],[1,1],[1,1,1],[2,2],[2,1,2],[2,2,2],[2,1,2,2],[2,2,2,2],[2,2,1,2,2],[2,2,2,2,2]]
+      
+      func createPipString(thatFits pipRect: CGRect) -> NSAttributedString {
+          let maxVerticalPipCount = CGFloat(pipsPerRowForRank.reduce(0) { max($1.count, $0) })
+          let maxHorizontalPipCount = CGFloat(pipsPerRowForRank.reduce(0) { max($1.max() ?? 0, $0) })
+          let verticalPipRowSpacing = pipRect.size.height / maxVerticalPipCount
+          let attemptedPipString = centeredAttributedString(suit, fontSize: verticalPipRowSpacing)
+          let probablyOkayPipStringFontSize = verticalPipRowSpacing / (attemptedPipString.size().height / verticalPipRowSpacing)
+          let probablyOkayPipString = centeredAttributedString(suit, fontSize: probablyOkayPipStringFontSize)
+          if probablyOkayPipString.size().width > pipRect.size.width / maxHorizontalPipCount {
+              return centeredAttributedString(suit, fontSize: probablyOkayPipStringFontSize / (probablyOkayPipString.size().width / (pipRect.size.width / maxHorizontalPipCount)))
+          } else {
+              return probablyOkayPipString
+          }
+      }
+      
+      if pipsPerRowForRank.indices.contains(rank) {
+          let pipsPerRow = pipsPerRowForRank[rank]
+          var pipRect = bounds.insetBy(dx: cornerOffset, dy: cornerOffset).insetBy(dx: cornerString.size().width, dy: cornerString.size().height / 2)
+          let pipString = createPipString(thatFits: pipRect)
+          let pipRowSpacing = pipRect.size.height / CGFloat(pipsPerRow.count)
+          pipRect.size.height = pipString.size().height
+          pipRect.origin.y += (pipRowSpacing - pipRect.size.height) / 2
+          for pipCount in pipsPerRow {
+              switch pipCount {
+              case 1:
+                  pipString.draw(in: pipRect)
+              case 2:
+                  pipString.draw(in: pipRect.leftHalf)
+                  pipString.draw(in: pipRect.rightHalf)
+              default:
+                  break
+              }
+              pipRect.origin.y += pipRowSpacing
+          }
+      }
+  }
 
   
     override func draw(_ rect: CGRect) {
@@ -98,10 +155,10 @@ class PlayingCardView: UIView {
       roundedRect.fill()
       
       if isFaceUp {
-        if let faceCardImage = UIImage(named: rankString+suit) {
-          faceCardImage.draw(in: bounds.zoom(by: SizeRatio.faceCardImageSizeToBoundsSize))
+        if let faceCardImage = UIImage(named: rankString+suit, in: Bundle(for: self.classForCoder), compatibleWith: traitCollection) {
+          faceCardImage.draw(in: bounds.zoom(by: faceCardScale))
         } else {
-//          drawPips()
+          drawPips() // 추가하기
         }
       } else {
         if let cardBackImage = UIImage(named: "cardback") {
